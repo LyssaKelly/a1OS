@@ -18,9 +18,11 @@ of hours number of days
 foregorund will tell when parent ends and when child ends 
 after process is started and finished
 
+
 Running
 -----------------------------
 -To compile use "make", then to run use "./msh"
+-Test file is in "docs" and named "practice.txt"
 -Tested using
     ~ls
     ~ls -1

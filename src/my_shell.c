@@ -16,13 +16,11 @@ pid_t pid;
 void decipher(char** args);
 void list(char** args);
 void add(char** args);
-int checker(char* args);
 void textOut(char** args);
 void textIn(char** args);
 void date(char** args);
 void background(char **args);
 void foreground(char **args);
-
 
 int main() {
 	char **args; 
@@ -36,103 +34,45 @@ int main() {
 
 void decipher(char** args){
 	char* exit1 = "exit";
-	//int status = 0;
 	int counter = 0;
 	int biggerThan = 0;
 	int lessThan = 0;
 
-	for(int i = 0; args[i] != NULL; i++){
+	for(int i = 0; args[i] != NULL; i++){//finding the number of arguments
 			counter +=1;
 	}
-	for(int f = 0; f < counter; f++){
+	for(int f = 0; f < counter; f++){//finding a < or > in command
 		if(strcmp(args[f], ">") == 0){
 			biggerThan = 1;
 		}
 		else if(strcmp(args[f], "<") == 0){
 			lessThan = 1;
 		}
-		else if(lessThan == 1 && biggerThan == 1){
-			//they inputed some stupid shit
-
-		}
 	}
-	if(strcmp(args[0], exit1) == 0){
+	if(strcmp(args[0], exit1) == 0){//if exit command
 		exit(0);
 	}
-	else if(strcmp(args[0], "arg") == 0 || strcmp(args[0], "Arg") == 0 || strcmp(args[0], "ARG") == 0){
+	else if(strcmp(args[0], "arg") == 0 || strcmp(args[0], "Arg") == 0 || strcmp(args[0], "ARG") == 0){//if arg is command call arg function
 		list(args);
 	}
-	else if(strcmp(args[0], "add") == 0 || strcmp(args[0], "Add") == 0 || strcmp(args[0], "ADD") == 0){
+	else if(strcmp(args[0], "add") == 0 || strcmp(args[0], "Add") == 0 || strcmp(args[0], "ADD") == 0){//if add is comand call add function
 		add(args);
 	}
-	else if(biggerThan == 1){
+	else if(biggerThan == 1){//if using <
 		textIn(args);	
     }
-	else if(lessThan == 1){
+	else if(lessThan == 1){//if using >
 		textOut(args);
 	}
-	else if(strcmp(args[0], "date") == 0){
+	else if(strcmp(args[0], "date") == 0){//if date function is called
 		date(args);
 	}
-	else if(strcmp(args[counter - 1], "&") == 0){
+	else if(strcmp(args[counter - 1], "&") == 0){//if running background process
 		background(args);
 	}
-	else{
+	else{//if random command is entered
 		foreground(args);
 	}
-		/*if(counter == 1){
-			char *repl1[] = {args[0], NULL };
-			child_pid = fork();
-			if(child_pid == 0){
-				execvp(args[0], repl1);
-				printf("Exiting program now");
-    			_exit(0);
-    		}
-    		else if(child_pid > 0){
-        		// Is the parent process 
-        		pid = getpid();
-        		printf("parent id is now = %d\n", pid);
-        		printf("\n");
-        		wpid = wait(&status);
-        		if(wpid != -1)  {
-            		printf("Child exit\n");
-            		if(status > 0)  {
-                		printf("Accept\n");
-            		} 
-            		else{
-                		printf("Complete parent process\n");
-                		printf("\n");
-            		}
-				}
-			}
-		}
-		if(counter != 1){
-			char *repl3[] = {args[0], args[1], NULL };
-			child_pid = fork();
-			if(child_pid == 0){
-    			execvp(args[0], repl3);
-				printf("Exiting program now");
-    			_exit(0);
-    		}
-    		else if(child_pid > 0)  {
-        		// Is the parent process 
-        		pid = getpid();
-        		printf("parent id is now = %d\n", pid);
-        		printf("\n");
-        		wpid = wait(&status);
-        		if(wpid != -1)  {
-           			printf("Child exit\n");
-           		if(status > 0)  {
-               		printf("Accept\n");
-           		} 
-           		else{
-               		printf("Complete parent process\n");
-               		printf("\n");
-           		}
-			}
-		}
-	}
-}*/
     counter = 0;
     lessThan = 0;
     biggerThan = 0;
@@ -142,114 +82,52 @@ void decipher(char** args){
 void background(char **args){
 	int counter = 0;
 	int status = 0;
-
-	for(int d = 0; args[d] != NULL; d++){
+	for(int d = 0; args[d] != NULL; d++){//finding the number of arguments
 		counter += 1;
 	}
-	if(counter == 2){
-			char *repl[] = {args[0], NULL };
-			child_pid = fork();
-			if(child_pid == 0){
-				execvp(args[0], repl);
-				printf("Exiting program now");
-    			_exit(0);
-    		}
-    		else if(child_pid > 0){
-        		// Is the parent process 
-        		pid = getpid();
-        		printf("parent id is now = %d\n", pid);
-        		if(wpid != -1){
-            		printf("Child exit\n");
-            		if(status > 0)  {
-               			printf("Accept\n");
-            		} 
-            		else{
-               			printf("Complete parent process\n");
-               			printf("\n");
-            		}
-				}
+	if(counter == 2){//if 1 arguments
+		char *repl[] = {args[0], NULL };
+		child_pid = fork();
+		if(child_pid == 0){//child is not created properly
+			if(execvp(args[0], repl) == -1){
+				printf("command not found\n");
+				_exit(0);
+				return;
 			}
-		}
-		if(counter != 1){
-			char *repl2[] = {args[0], args[1], NULL };
-			child_pid = fork();
-			if(child_pid == 0){
-    			execvp(args[0], repl2);
-				printf("Exiting program now");
-    			_exit(0);
-    		}
-    		else if(child_pid > 0)  {
-        		// Is the parent process 
-        		pid = getpid();
-        		printf("parent id is now = %d\n", pid);
-        		printf("\n");
-        		//wpid = wait(NULL);
-        		if(wpid != -1)  {
-            		printf("Child exit\n");
-            		if(status > 0)  {
-                		printf("Accept\n");
-            		}	 
-            		else{
-                		printf("Complete parent process\n");
-                		printf("\n");
-            		}
-				}
-			}
-		}
-}
-
-
-void foreground(char **args){
-	int counter = 0;
-	int status = 0;
-	for(int d = 0; args[d] != NULL; d++){
-		counter += 1;
-	}
-	if(counter == 1){
-			char *repl1[] = {args[0], NULL };
-			child_pid = fork();
-			if(child_pid == 0){
-				execvp(args[0], repl1);
-				printf("Exiting program now");
-    			_exit(0);
-    		}
-    		else if(child_pid > 0){
-        		// Is the parent process 
-        		pid = getpid();
-        		printf("parent id is now = %d\n", pid);
-        		printf("\n");
-        		wpid = wait(&status);
-        		if(wpid != -1)  {
-            		printf("Child exit\n");
-            		if(status > 0)  {
-                		printf("Accept\n");
-            		} 
-            		else{
-                		printf("Complete parent process\n");
-                		printf("\n");
-            		}
-				}
-			}
-		}
-		if(counter != 1){
-			char *repl3[] = {args[0], args[1], NULL };
-			child_pid = fork();
-			if(child_pid == 0){
-    			execvp(args[0], repl3);
-				printf("Exiting program now");
-    			_exit(0);
-    		}
-    		else if(child_pid > 0)  {
-        		// Is the parent process 
-        		pid = getpid();
-        		printf("parent id is now = %d\n", pid);
-        		printf("\n");
-        		wpid = wait(&status);
-        		if(wpid != -1)  {
-           			printf("Child exit\n");
+			printf("Exiting program now");
+    		_exit(0);
+    	}
+    	else if(child_pid > 0){//can continue
+    		wpid = wait(NULL);
+        	if(wpid != -1){//if child is exited
+           		printf("Child exit\n");
            		if(status > 0)  {
-               		printf("Accept\n");
            		} 
+           		else{
+              		printf("Complete parent process\n");
+           			printf("\n");
+            	}
+			}
+		}
+	}
+	if(counter > 2){//if more than 1 argument
+		char *repl2[] = {args[0], args[1], NULL };
+		child_pid = fork();
+		if(child_pid == 0){
+			if(execvp(args[0], repl2) == -1){
+				printf("command not found\n");
+				_exit(0);
+				return;
+			}
+			printf("Exiting program now");
+    		_exit(0);
+    	}
+    	else if(child_pid > 0)  { 
+       		wpid = wait(NULL);
+       		if(wpid != -1)  {
+           		printf("Child exit\n");
+           		if(status > 0)  {
+           		}	 
            		else{
                		printf("Complete parent process\n");
                		printf("\n");
@@ -260,132 +138,200 @@ void foreground(char **args){
 }
 
 
-void list(char** args){
+void foreground(char **args){//same as background but contains the wait()
 	int counter = 0;
-	for(int i = 0; args[i] != NULL; i++){
+	int status = 0;
+	for(int d = 0; args[d] != NULL; d++){
+		counter += 1;
+	}
+	if(counter == 1){
+			char *repl1[] = {args[0], NULL };
+			child_pid = fork();
+			if(child_pid == 0){
+				if(execvp(args[0], repl1) == -1){
+					printf("command not found\n");
+					_exit(0);
+					return;
+				}
+				printf("Exiting program now");
+    			_exit(0);
+    		}
+    		else if(child_pid > 0){
+        		pid = getpid();
+        		printf("\n");
+        		wpid = wait(&status);
+        		if(wpid != -1)  {
+				}
+			}
+		}
+		if(counter != 1){
+			char *repl3[] = {args[0], args[1], NULL };
+			child_pid = fork();
+			if(child_pid == 0){
+				if(execvp(args[0], repl3) == -1){
+					printf("command not found\n");
+					_exit(0);
+					return;
+				}
+				printf("Exiting program now");
+    			_exit(0);
+    		}
+    		else if(child_pid > 0)  {
+        		pid = getpid();
+        		printf("\n");
+        		wpid = wait(&status);
+        		if(wpid != -1)  {
+           		/*if(status > 0)  {
+           		} 
+           		else{
+           		}*/
+			}
+		}
+	}
+}
+
+
+void list(char** args){//the arg function
+	int counter = 0;
+	int start = 0;
+	int end = 0;
+	for(int i = 0; args[i] != NULL; i++){//counting number of arguments
 		counter +=1;
+		for(int e = 0; e < strlen(args[i]); e++){
+			if(args[i][e] == '"' && start == 0){
+				start = i;
+			}
+			else if(args[i][e] == '"' && start != 0){
+				end = i;
+			}
+		}
+	}
+	if(start != 0 && end != 0){
+		counter = counter - (end - start);
 	}
 	counter -= 1;
-	printf("The number of numbers you entered is: %d\n", counter);
-	printf("The numbers you entered are: ");
-	for(int g = 1; g < counter; g++){
-		printf("%s, ", args[g]);
+	printf("The number of arguments you entered is: %d\n", counter);
+	printf("The arguments you entered are: ");
+	for(int g = 1; g < counter + (end - start); g++){//prints out list
+		printf("%s ", args[g]);
 	}
-	printf("%s\n", args[counter]);
+	printf("%s\n", args[counter + (end - start)]);
 	printf("\n");
 }
 
-void add(char** args){
+void add(char** args){//adding function
 	int total = 0;
 	int fromString = 0;
 	int counter = 0;
-
 	for(int y = 1; args[y] != NULL; y++) {
 		fromString = (int)strtol(args[y], (char **)NULL, 0);
 		total += fromString;
 		counter += 1;
+		if(strtol(args[y], (char **)NULL, 0) == 0){
+			printf("You entered in non-numericals; only numerical values will be added to total.\n");
+			args[y] = "0";
+		}
 	}
-	for(int t = 1; t < counter; t++){
+	for(int t = 1; t < counter; t++){//prints out equation to screen
 		printf("%s + ", args[t]);
 	}
 	printf("%s ", args[counter]);
-	printf(" = %d\n", total);
+	printf(" = %d\n", total);//prints out total
 	printf("\n");
 	total = 0;
+	return;
 }
 
-void textOut(char** args){
+void textOut(char** args){//prints out stuff from whatever command is entered
 	int c;
 	FILE *file;
 	int counter = 0;
-	printf("textOut is running\n");
-	for(int y = 0; args[y] != NULL; y++) {
+	for(int y = 0; args[y] != NULL; y++) {//counts number of arguments
 		counter += 1;
 	}
-	printf("The file name is: %s\n", args[counter -1]);
-	file = fopen(args[counter-1], "r");
+	file = fopen(args[counter-1], "r");//opens file
 	if(file){
-		printf("The text is: \n");
-    	while ((c = getc(file)) != EOF){
+    	while ((c = getc(file)) != EOF){//prints out file
         	printf("%c", c);
     		fclose(file);
 		}
 		printf("\n");
 	}
-	else{
+	else{//if file can't be opened
 		printf("Couldn't open file\n");
 		printf("\n");
 	}
 }
 
 
-void textIn(char** args){
-	FILE *goingOut;
+void textIn(char** args){//writes in command to specified file
 	int counter2 = 0;
 	int status = 0;
 	int y = 0;
-	while(strcmp(args[y], ">") != 0){
+	while(strcmp(args[y], ">") != 0){//counts how many arguments are put in
 		counter2 += 1;
 		y++;
 	}
-	if(counter2 == 1){
+	if(counter2 == 1){//if one argument
 		char *replText[] = {args[0], args[2], NULL};
-		printf("The file name is %s\n", args[2]);
 		child_pid = fork();
-	//strcpy(args[2], NULL);
-   // goingOut = freopen(args[counter], "w+", stdout);
-    //printf("running 3rd block of code");
-	//child_pid = fork();
     	if(child_pid == 0){
-    		//printf("trying");
-    		goingOut = freopen(args[2], "w+", stdout);
-    		printf("trying");
-    	//if(counter > 2){//if there is an argument
-    		execvp(args[0], replText);
-    		printf("trying");
+    		FILE *goingOut = freopen(args[2], "w+", stdout);
+    		if(execvp(args[0], replText) == -1){
+					printf("command not found\n");
+					fclose(goingOut);
+					_exit(0);
+					return;
+				}
+    		//fclose(goingOut);
     		_exit(0);
     		fclose(goingOut);
-    		//_exit(0);
+
     	}
     	else if(child_pid > 0){
     		pid = getpid();
 	    	wpid = wait(&status);
+	    	if(wpid != -1)  {
+           		if(status > 0)  {
+               		printf("Accept\n");
+           		} 
+           		else{
+           		}
+           	}
 		}
 	}
-	if(counter2 == 2){
+	if(counter2 == 2){//if two arguments
 		char *replText2[] = {args[0], args[1], args[3], NULL};
-		printf("The file name is %s\n", args[3]);
 		child_pid = fork();
-   // goingOut = freopen(args[counter], "w+", stdout);
-    //printf("running 3rd block of code");
-	//child_pid = fork();
     	if(child_pid == 0){
-    		goingOut = freopen(args[3], "w+", stdout);
-    	//if(counter > 2){//if there is an argument
-    		execvp(args[0], replText2);
-    		_exit(0);
+    		FILE *goingOut = freopen(args[3], "w+", stdout);
+    		if(execvp(args[0], replText2) == -1){
+					printf("command not found\n");
+					fclose(goingOut);
+					_exit(0);
+					return;
+				}
     		fclose(goingOut);
-    		//_exit(0);
+    		_exit(0);
     	}	
     	else if(child_pid > 0){
     		pid = getpid();
 	    	wpid = wait(&status);
 		}
 	}
-	if(counter2 == 3){
-		char *replText2[] = {args[0], args[1], args[2], args[4], NULL};
-		//printf("The file name is %s\n", args[3]);
+	if(counter2 == 3){//if three arguments
+		char *replText3[] = {args[0], args[1], args[2], args[4], NULL};
 		child_pid = fork();
-   // goingOut = freopen(args[counter], "w+", stdout);
-    //printf("running 3rd block of code");
-	//child_pid = fork();
     	if(child_pid == 0){
-    		goingOut = freopen(args[4], "w+", stdout);
-    	//if(counter > 2){//if there is an argument
-    		execvp(args[0], replText2);
+    		FILE *goingOut = freopen(args[4], "w+", stdout);
+    		if(execvp(args[0], replText3) == -1){
+					printf("command not found\n");
+					fclose(goingOut);
+					_exit(0);
+					return;
+				}
+       		fclose(goingOut);
     		_exit(0);
-    		fclose(goingOut);
-    		//_exit(0);
     	}	
     	else if(child_pid > 0){
     		pid = getpid();
@@ -396,25 +342,38 @@ void textIn(char** args){
 	y = 0;
 }	
 
-
-void date(char** args){
+/*This is the function I made, enter in the date command followed
+  by a numerical value for number of minutes, then hours, then days
+  and will output the total time in minutes, hours and days
+  SAMPLE = "date 3 4 12"*/
+void date(char** args){//
 	double totalMin = 0;
 	double totalHr = 0.00;
 	double totalDay = 0;
 	double sixty = 60.00;
-	double twFr = 24.00; 
-	totalMin += strtol(args[1], (char **)NULL, 0);
-	totalMin += strtol(args[2], (char **)NULL, 0)*60;
-	totalMin += 1440*strtol(args[3], (char **)NULL, 0);
+	double twFr = 24.00;
+	int counter = 0;
+	for(int y = 0; args[y] != NULL; y++) {//counts number of arguments
+		counter += 1;
+	}
+	if(counter < 4){//if not enough arguments are entered
+		printf("Not enough arguments, exiting command\n");
+		return;
+	}
+	else if(counter > 3){
+		totalMin += strtol(args[1], (char **)NULL, 0);
+		totalMin += strtol(args[2], (char **)NULL, 0)*60;
+		totalMin += 1440*strtol(args[3], (char **)NULL, 0);
 
-	totalHr = (float)totalMin/sixty;
+		totalHr = (float)totalMin/sixty;
 
-	totalDay = (float)totalHr/twFr;
+		totalDay = (float)totalHr/twFr;
 
-	printf("You have spent %.2lf minutes so far this month\n", totalMin);
-	printf("You have spent %.2lf hours so far this month\n", totalHr);
-	printf("You have spent %.2lf days so far this month\n", totalDay);
-	printf("\n");
+		printf("You have spent %.2lf minutes so far this month\n", totalMin);
+		printf("You have spent %.2lf hours so far this month\n", totalHr);
+		printf("You have spent %.2lf days so far this month\n", totalDay);
+		printf("\n");
+	}
 }
 
 
